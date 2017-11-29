@@ -153,8 +153,8 @@
     // test if a specific major diagonal on this board contains a conflict
     buildMajorDiag: function(majorDiagonalColumnIndexAtFirstRow) {
       const diagArr = [];
-      let colIndex = majorDiagonalColumnIndexAtFirstRow;
       const boardSize = this.get('n');
+      let colIndex = majorDiagonalColumnIndexAtFirstRow;
       let rowIndex;
       if (colIndex < 0) {
         rowIndex = Math.abs(colIndex);
@@ -201,9 +201,28 @@
     // Minor Diagonals - go from top-right to bottom-left
     // --------------------------------------------------------------
     //
+    buildMinorDiag: function(minorDiagonalColumnIndexAtFirstRow) {
+      const diagArr = [];
+      const boardSize = this.get('n');
+      let colIndex = minorDiagonalColumnIndexAtFirstRow;
+      let rowIndex;
+      if (colIndex > boardSize) {
+        rowIndex = boardSize - colIndex + 1;
+      } else {
+        rowIndex = 0;
+      }
+      while (rowIndex < boardSize && colIndex >= 0) {
+        const row = this.get(rowIndex);
+        diagArr.push(row[colIndex]);
+        rowIndex++;
+        colIndex--;
+      }
+      return diagArr;
+    },
+
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      return false;
     },
 
     // test if any minor diagonals on this board contain conflicts
