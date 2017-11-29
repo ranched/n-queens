@@ -121,7 +121,6 @@
       },
 
     hasColConflictAt: function(colIndex) {
-      
       const col = this.buildCol(colIndex);
       let hasQueen = false;
       for (let i = 0; i < col.length; i++) {
@@ -152,8 +151,38 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
+    buildMajorDiag: function(majorDiagonalColumnIndexAtFirstRow) {
+      const diagArr = [];
+      let colIndex = majorDiagonalColumnIndexAtFirstRow;
+      const boardSize = this.get('n');
+      let rowIndex;
+      if (colIndex < 0) {
+        rowIndex = Math.abs(colIndex);
+        colIndex = 0;
+      } else {
+        rowIndex = 0;
+      }
+      while (rowIndex < boardSize && colIndex < boardSize) {
+        let row = this.get(rowIndex);
+        diagArr.push(row[colIndex]);
+        rowIndex++;
+        colIndex++;
+      }
+      return diagArr;
+    },
+
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      const majorDiag = this.buildMajorDiag(majorDiagonalColumnIndexAtFirstRow);
+      let hasQueen = false;
+      for (let i = 0; i < majorDiag.length; i++) {
+        if (majorDiag[i]) {
+          if (hasQueen) {
+            return true;
+          }
+          hasQueen = true;
+        }
+      }
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
