@@ -207,7 +207,8 @@
       let colIndex = minorDiagonalColumnIndexAtFirstRow;
       let rowIndex;
       if (colIndex > boardSize) {
-        rowIndex = boardSize - colIndex + 1;
+        rowIndex = Math.abs(boardSize - colIndex) + 1;
+        colIndex = boardSize - 1;
       } else {
         rowIndex = 0;
       }
@@ -222,11 +223,32 @@
 
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      const minorDiag = this.buildMinorDiag(minorDiagonalColumnIndexAtFirstRow);
+      let hasQueen = false;
+      
+      for (let i = 0; i < minorDiag.length; i++) {
+        if (minorDiag[i]) {
+          if (hasQueen) {
+            return true;
+          }
+          hasQueen = true;
+        }
+      }
+
       return false;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      const boardSize = this.get('n');
+      //for (let i = -boardSize + 1; i < boardSize; i++) {
+      for (let i = boardSize * 2 - 2; i >= 0; i--) {
+        
+        if(this.hasMinorDiagonalConflictAt(i) === true) {
+          return true;
+        }
+      }
+
       return false; // fixme
     }
 
