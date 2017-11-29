@@ -187,7 +187,13 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      const boardSize = this.get('n');
+      for (let i = -boardSize + 1; i < boardSize; i++) {
+        if(this.hasMajorDiagonalConflictAt(i) === true) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
