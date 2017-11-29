@@ -109,13 +109,41 @@
     // --------------------------------------------------------------
     //
     // test if a specific column on this board contains a conflict
+    buildCol: function(colIndex) {
+        let colArr = [];
+        const boardSize = this.get('n');
+
+        for(let i = 0; i < boardSize; i++){
+          const row = this.get(i);
+          colArr.push(row[colIndex]);
+        }
+        return colArr;
+      },
+
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      
+      const col = this.buildCol(colIndex);
+      let hasQueen = false;
+      for (let i = 0; i < col.length; i++) {
+        if (col[i]) {
+          if (hasQueen) {
+            return true;
+          }
+          hasQueen = true;
+        }
+      }
+      return false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      const boardSize = this.get('n');
+      for (let i = 0; i < boardSize; i++) {
+        if (this.hasColConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
