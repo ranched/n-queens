@@ -77,13 +77,12 @@ window.findNRooksSolution = function(n) {
   var rows = generateRows(n);
   var firstSolution = generatePermutations(n, 1);
   var solutionRowOrder = [...firstSolution];
-  var boardLayout = [];debugger
+  var boardLayout = [];
   if(n > 1) {solutionRowOrder = solutionRowOrder[0].split(',')}
   solutionRowOrder.forEach( index => {
     boardLayout.push(rows[parseInt(index) - 1]);
-    console.log(`n: ${n}`);
   });
-  var solution = boardLayout; //new Board(boardLayout);
+  var solution = boardLayout; 
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
@@ -99,16 +98,36 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution = window.countNQueensSolutions(n, true); //fixme
 
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
-window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+window.countNQueensSolutions = function(n, first) {
+  var rows = generateRows(n);
+  var permutations = generatePermutations(n);
+  permutations = [...permutations];
+  layoutRowOrder = permutations.map( i => i.split(',') );
+  var earlyReturn = false;
+  var solutionCount = 0; //fixme
+  layoutRowOrder.forEach( layoutIndices => {
+    if(layoutIndices[0].length === 0) { layoutIndices.pop(); }
+    layoutIndices = layoutIndices.map( i => parseInt(i)) ;
+    let boardLayout = [];
+    layoutIndices.forEach( index => {
+      boardLayout.push(rows[index - 1]);
+    });
+    let boardToTest = new Board(boardLayout);
+    if(!boardToTest.hasAnyQueensConflicts()){
+      if(first){
+        earlyReturn = boardLayout;
+      }
+      solutionCount++;
+    }
+  });
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
-  return solutionCount;
+  return earlyReturn ? earlyReturn : solutionCount;
 };
