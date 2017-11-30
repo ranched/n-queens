@@ -10,13 +10,73 @@
 // (There are also optimizations that will allow you to skip a lot of the dead search space)
 // take a look at solversSpec.js to see what the tests are expecting
 
+//Returns a set of unique permutations for 1 to n
+window.generatePermutations = function(n) {
+  var generateRandom = (min, max) => {
+    return Math.floor(Math.random() * (max - min)) + min;  
+  }
+
+  function factorialize(num) {
+    if (num < 0) 
+          return -1;
+    else if (num == 0) 
+        return 1;
+     else {
+          return (num * factorialize(num - 1));
+      }
+  }
+
+  var insertNum = (length, arr) => {
+    var rando = generateRandom(1, length + 1);
+    if(arr.includes(rando)){
+      insertNum(length, arr);
+    } else {
+      arr.push(rando);
+    }
+  }
+
+  var generatePerm = (n) => {
+    var perm = []
+    while(perm.length !== n){
+      insertNum(n, perm)
+    }
+    return perm
+  }
+
+  var generateAllPerms = (n) => {
+    var totalPermsCount = factorialize(n);
+    var perms = new Set();
+    while(perms.size !== totalPermsCount){
+      perms.add(generatePerm(n).toString());
+    }
+    return perms;
+  }
+
+  return generateAllPerms(n)
+};
+
+//ngenerates an array of board rows with one piece in each, and no conflicting columns
+var generateRows = (n) => {
+  var rows = [];
+  for (var i = 0; i < n; i++){
+    var row = [];
+    for (var j = 0; j < n; j++){
+      if(j === i){
+        row.push(1);
+      } else {
+        row.push(0);
+      }
+    }
+    rows.push(row);
+  }
+  return rows;
+}
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
-
-
-
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  
+
+  var solution = new Board();
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
@@ -24,7 +84,7 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutionCount = generatePermutations(n).size;
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
