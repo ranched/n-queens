@@ -98,8 +98,15 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = window.countNQueensSolutions(n, true); //fixme
+  //if the below line returns true instead of a boardlayout, there are no solutions for size of n
+  var solution = window.countNQueensSolutions(n, true); 
 
+  //if no solutions for size of n, return an empty boardsize of n
+  if(typeof solution === 'boolean' && solution === true){
+    solution = new Board({n: n}).rows();
+  }
+
+  console.log(`n: ${n} findNQueensSolution: ${solution}`)
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
 };
@@ -110,7 +117,7 @@ window.countNQueensSolutions = function(n, first) {
   var permutations = generatePermutations(n);
   permutations = [...permutations];
   layoutRowOrder = permutations.map( i => i.split(',') );
-  var earlyReturn = false;
+  var earlyReturn = first;
   var solutionCount = 0; //fixme
   layoutRowOrder.forEach( layoutIndices => {
     if(layoutIndices[0].length === 0) { layoutIndices.pop(); }
