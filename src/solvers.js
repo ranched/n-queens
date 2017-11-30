@@ -11,7 +11,7 @@
 // take a look at solversSpec.js to see what the tests are expecting
 
 //Returns a set of unique permutations for 1 to n
-window.generatePermutations = function(n) {
+window.generatePermutations = function(n, stopPoint) {
   var generateRandom = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min;  
   }
@@ -46,7 +46,7 @@ window.generatePermutations = function(n) {
   var generateAllPerms = (n) => {
     var totalPermsCount = factorialize(n);
     var perms = new Set();
-    while(perms.size !== totalPermsCount){
+    while(perms.size !== totalPermsCount && stopPoint !== perms.size){
       perms.add(generatePerm(n).toString());
     }
     return perms;
@@ -74,9 +74,16 @@ var generateRows = (n) => {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 window.findNRooksSolution = function(n) {
-  
-
-  var solution = new Board();
+  var rows = generateRows(n);
+  var firstSolution = generatePermutations(n, 1);
+  var solutionRowOrder = [...firstSolution];
+  var boardLayout = [];debugger
+  if(n > 1) {solutionRowOrder = solutionRowOrder[0].split(',')}
+  solutionRowOrder.forEach( index => {
+    boardLayout.push(rows[parseInt(index) - 1]);
+    console.log(`n: ${n}`);
+  });
+  var solution = boardLayout; //new Board(boardLayout);
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
